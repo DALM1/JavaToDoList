@@ -9,20 +9,12 @@ public class Task {
         this.completed = false;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 
     @Override
     public String toString() {
-        return title + (completed ? " (terminée)" : " (en cours)");
+        return title + (completed ? " (terminée)" : " (non terminée)");
     }
 }

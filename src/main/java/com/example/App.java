@@ -9,6 +9,13 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+
+            System.out.println("___________   ________        .____   .__          __ ");
+            System.out.println("\\__    ___/___\\______ \\   ____|    |  |__| _______/  |");
+            System.out.println("|    | /  _ \\|    |  \\ /  _ \\|     |  |  |/  ___/\\   __\\");
+            System.out.println("|    |(  <_> )    `   (  <_> )     |__|  |\\___ \\  |  |");
+            System.out.println("|____| \\____/_______  /\\____/|_______ \\__/____  > |__|");
+            System.out.println("\n");
             System.out.println("\n--- To-Do List ---");
             System.out.println("1. Ajouter une tâche");
             System.out.println("2. Afficher les tâches");
