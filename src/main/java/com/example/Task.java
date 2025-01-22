@@ -1,12 +1,16 @@
 package com.example;
 
 public class Task {
-    private String title;
+    private final String title;
     private boolean completed;
 
     public Task(String title) {
         this.title = title;
         this.completed = false;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     public void setCompleted(boolean completed) {

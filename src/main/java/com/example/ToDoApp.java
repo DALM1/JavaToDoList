@@ -9,11 +9,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class ToDoApp extends Application {
-    private final ArrayList<Task> tasks = new ArrayList<>();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -23,38 +20,39 @@ public class ToDoApp extends Application {
         layout.setStyle("-fx-padding: 10; -fx-spacing: 10;");
 
         ListView<String> taskListView = new ListView<>();
+        taskListView.setId("task-list");
         taskListView.setPrefHeight(200);
 
         TextField taskInput = new TextField();
+        taskInput.setId("task-input");
         taskInput.setPromptText("Entrez une nouvelle tâche");
 
         Button addButton = new Button("Ajouter");
+        addButton.setId("add-button");
         addButton.setOnAction(event -> {
             String title = taskInput.getText().trim();
             if (!title.isEmpty()) {
                 tasks.add(new Task(title));
                 updateTaskList(taskListView);
                 taskInput.clear();
-            } else {
-                showAlert("Erreur", "Le titre de la tâche ne peut pas être vide.");
             }
         });
 
-        Button markAsCompletedButton = new Button("Marquer comme terminée");
-        markAsCompletedButton.setOnAction(event -> {
-            int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
-            if (selectedIndex >= 0) {
-                tasks.get(selectedIndex).setCompleted(true);
+        Button completeButton = new Button("Marquer comme terminée");
+        completeButton.setId("complete-button");
+        completeButton.setOnAction(event -> {
+            String selectedItem = taskListView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                int index = taskListView.getSelectionModel().getSelectedIndex();
+                tasks.get(index).setCompleted(true);
                 updateTaskList(taskListView);
-            } else {
-                showAlert("Erreur", "Veuillez sélectionner une tâche à marquer comme terminée.");
             }
         });
 
         layout.getChildren().addAll(
             taskListView,
             new HBox(10, taskInput, addButton),
-            markAsCompletedButton
+            completeButton
         );
 
         Scene scene = new Scene(layout, 400, 300);
@@ -67,13 +65,5 @@ public class ToDoApp extends Application {
         for (Task task : tasks) {
             taskListView.getItems().add(task.toString());
         }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
