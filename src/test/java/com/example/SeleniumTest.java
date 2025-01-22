@@ -1,40 +1,42 @@
 package com.example;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ListView;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.ApplicationTest;
+import javafx.stage.Stage;
 
-public class SeleniumTest {
-    private WebDriver driver;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
-    @Before
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "/chemin/vers/chromedriver");
-        driver = new ChromeDriver();
+public class SeleniumTest extends ApplicationTest {
+
+    @Override
+    public void start(Stage stage) {
+        new ToDoApp().start(stage);
     }
 
     @Test
     public void testAddTask() {
-        driver.get("http://localhost:8080");
+        clickOn(".text-field").write("Ma première tâche");
 
-        WebElement inputField = driver.findElement(By.id("taskInput"));
-        inputField.sendKeys("Ma première tâche");
-        WebElement addButton = driver.findElement(By.id("addTaskButton"));
-        addButton.click();
+        clickOn(".button").lookup(hasText("Ajouter")).queryButton().fire();
 
-        WebElement taskList = driver.findElement(By.id("taskList"));
-        assertTrue(taskList.getText().contains("Ma première tâche"));
+        verifyThat(".list-view", (ListView<String> listView) ->
+            listView.getItems().contains("Ma première tâche (non terminée)"));
     }
 
-    @After
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+    @Test
+    public void testMarkTaskAsCompleted() {
+        clickOn(".text-field").write("Une tâche à terminer");
+        clickOn(".button").lookup(hasText("Ajouter")).queryButton().fire();
+
+        clickOn(".list-view").clickOn("Une tâche à terminer (non terminée)");
+
+        clickOn(".button").lookup(hasText("Marquer comme terminée")).queryButton().fire();
+
+        verifyThat(".list-view", (ListView<String> listView) ->
+            listView.getItems().contains("Une tâche à terminer (terminée)"));
     }
 }
